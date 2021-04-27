@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <title>Mentors Directory</title>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h3>Mentors Directory</h3>
+    <hr>
+    <div sec:authorize="hasAnyRole('ROLE_ADMIN')">
+
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Modify</th>
+            <th>Add Interns</th>
+            <th>Interns</th>
+            <th>Marks</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="tempEmployee : ${mentors}">
+
+            <td th:text="${tempEmployee.firstName}" />
+            <td th:text="${tempEmployee.lastName}" />
+
+            <td>
+
+                    <a th:href="@{/mentors/showFormForUpdate(employeeId=${tempEmployee.id})}"
+                       class="btn btn-info btn-sm">
+                        Update
+                    </a>
+
+            </td>
+            <td>
+                <a th:href="@{/interns/showFormForAdd(mentor=${tempEmployee.id})}"
+                   class="btn btn-info btn-sm">
+                    ADD INTERN
+                </a>
+            </td>
+            <td>
+                <span th:each="tempIntern :${tempEmployee.theInterns}">
+                    <span th:text="${tempIntern.firstName}" /><br>
+                </span>
+            </td>
+            <td>
+                <span th:each="tempIntern :${tempEmployee.theInterns}">
+                    <span th:text="${tempIntern.marks}" /><br>
+                </span>
+            </td>
+        </tr>
+
+        </tbody>
+
+    </table>
+
+        </div>
+
+
+    <div sec:authorize="hasAnyRole('ROLE_MENTOR')">
+        <form th:action="@{/interns/list}">
+         <label> Enter Your Name To Get Interns <List></List></label> <input type="text" th:name="mentors"/>
+            <input type="submit"/>
+        </form>
+        </div>
+<br>
+    <!-- Add a logout button -->
+    <form action="#" th:action="@{/logout}"
+          method="POST">
+
+        <input type="submit" value="Logout" class="btn btn-outline-primary mt-2" />
+
+    </form>
+
+</div>
+
+</body>
+</html>
